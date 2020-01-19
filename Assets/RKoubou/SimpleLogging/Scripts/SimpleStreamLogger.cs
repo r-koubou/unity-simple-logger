@@ -6,6 +6,7 @@
    ======================================================================== */
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
 
@@ -24,6 +25,11 @@ namespace RKoubou.SimpleLogging
         {
         }
 
+        public bool IsLogLevelAllowed( LogLevel logLevel )
+        {
+            return true;
+        }
+
         public SimpleStreamLogger( Stream source, ISimpleLogFormatter formatter)
         {
             writer = new StreamWriter( source ) { AutoFlush = true };
@@ -39,10 +45,7 @@ namespace RKoubou.SimpleLogging
 
         public void Log( LogLevel level, object message, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0, [CallerMemberName] string callerMemberName = "" )
         {
-
-#if UNITY_EDITOR
-            UnityEngine.Debug.unityLogger.Log( LogLevelConverter.ToUnity( level ), message );
-#endif
+            LogUnityConsole( level, message );
 
             writer.WriteLine(
                 Formatter.Format(
@@ -56,10 +59,7 @@ namespace RKoubou.SimpleLogging
 
         public void LogException( LogLevel level, Exception exception, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0, [CallerMemberName] string callerMemberName = "" )
         {
-
-#if UNITY_EDITOR
-            UnityEngine.Debug.unityLogger.LogException( exception );
-#endif
+            LogExceptionUnityConsole( exception );
 
             writer.WriteLine(
                 Formatter.ExceprionFormat(
@@ -69,6 +69,18 @@ namespace RKoubou.SimpleLogging
                     callerLineNumber,
                     callerMemberName )
             );
+        }
+
+        [Conditional( "UNITY_EDITOR" )]
+        private void LogUnityConsole( LogLevel level, object message )
+        {
+            UnityEngine.Debug.unityLogger.Log( LogLevelConverter.ToUnity( level ), message );
+        }
+
+        [Conditional( "UNITY_EDITOR" )]
+        private void LogExceptionUnityConsole( Exception exception )
+        {
+            UnityEngine.Debug.unityLogger.LogException( exception );
         }
     }
 }

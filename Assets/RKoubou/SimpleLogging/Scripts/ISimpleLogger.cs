@@ -20,6 +20,11 @@ namespace RKoubou.SimpleLogging
         ISimpleLogFormatter Formatter { get; set; }
 
         /// <summary>
+        /// Check logging is enabled from given log level.
+        /// </summary>
+        bool IsLogLevelAllowed( LogLevel logLevel );
+
+        /// <summary>
         /// Log a message with formatter.
         /// </summary>
         void LogException(

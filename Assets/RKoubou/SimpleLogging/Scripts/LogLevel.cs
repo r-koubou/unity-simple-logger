@@ -15,12 +15,12 @@ namespace RKoubou.SimpleLogging
     {
         Off,
         Trace,
+        Assert,
         Debug,
         Info,
         Warning,
         Error,
         Fatal,
-        Assert
     }
 
     /// <summary>
