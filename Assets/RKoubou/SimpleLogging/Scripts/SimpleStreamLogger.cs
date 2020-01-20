@@ -20,8 +20,12 @@ namespace RKoubou.SimpleLogging
         private StreamWriter writer;
         public ISimpleLogFormatter Formatter { get; set; }
 
-        public SimpleStreamLogger( string outputPath, ISimpleLogFormatter formatter, FileMode fileMode = FileMode.Append )
-            : this( new FileStream( outputPath, fileMode ), formatter )
+        public SimpleStreamLogger(
+            string outputPath,
+            ISimpleLogFormatter formatter,
+            FileMode fileMode = FileMode.Append,
+            bool autoFlush = false )
+            : this( new FileStream( outputPath, fileMode ), formatter, autoFlush )
         {
         }
 
@@ -30,9 +34,9 @@ namespace RKoubou.SimpleLogging
             return true;
         }
 
-        public SimpleStreamLogger( Stream source, ISimpleLogFormatter formatter)
+        public SimpleStreamLogger( Stream source, ISimpleLogFormatter formatter, bool autoFlush = false )
         {
-            writer = new StreamWriter( source ) { AutoFlush = true };
+            writer = new StreamWriter( source ) { AutoFlush = autoFlush };
             Formatter = formatter;
         }
 
