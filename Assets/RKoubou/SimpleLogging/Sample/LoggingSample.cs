@@ -1,10 +1,11 @@
-/* =========================================================================
+﻿/* =========================================================================
 
     LoggingSample.cs
     Copyright(c) R-Koubou
 
    ======================================================================== */
 
+using System.IO;
 using UnityEngine;
 using RKoubou.SimpleLogging;
 
@@ -18,7 +19,7 @@ public class LoggingSample : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        logger = new SimpleStreamLogger( logFilePath, new SimpleLogFormatter() );
+        logger = new SimpleStreamLogger( new FileStream( logFilePath, FileMode.Append ), new SimpleLogFormatter() );
         logger.LogDebug( "Start" );
         logger.LogWaring( "Warning" );
         try
