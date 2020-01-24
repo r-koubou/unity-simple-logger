@@ -6,6 +6,7 @@
    ======================================================================== */
 
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace RKoubou.SimpleLogging
 {
@@ -24,15 +25,7 @@ namespace RKoubou.SimpleLogging
         /// </summary>
         bool IsLogLevelAllowed( LogLevel logLevel );
 
-        /// <summary>
-        /// Log a message with formatter.
-        /// </summary>
-        void LogException(
-            LogLevel level,
-            System.Exception exception,
-            [CallerFilePath] string callerFilePath = "",
-            [CallerLineNumber] int callerLineNumber = 0,
-            [CallerMemberName] string callerMemberName = "" );
+#region Synchronous methods
 
         /// <summary>
         /// Log a message with formatter.
@@ -44,76 +37,42 @@ namespace RKoubou.SimpleLogging
             [CallerLineNumber] int callerLineNumber = 0,
             [CallerMemberName] string callerMemberName = "" );
 
-    }
-
-    /// <summary>
-    /// Extension for ISimpleLogger
-    /// </summary>
-    public static class ISimpleLoggerExtension
-    { 
         /// <summary>
-        /// Log with <see cref="LogLevel.Debug"/> alias of <see cref="ISimpleLogger.Log(LogLevel, object, string, int, string)"/>
+        /// Log a message with formatter.
         /// </summary>
-        public static void LogDebug(
-            this ISimpleLogger logger,
-            object message,
-            [CallerFilePath] string callerFilePath = "",
-            [CallerLineNumber] int callerLineNumber = 0,
-            [CallerMemberName] string callerMemberName = "" )
-        {
-            logger.Log( LogLevel.Debug, message, callerFilePath, callerLineNumber, callerMemberName );
-        }
-
-        /// <summary>
-        /// Log with <see cref="LogLevel.Warning"/> alias of <see cref="ISimpleLogger.Log(LogLevel, object, string, int, string)"/>
-        /// </summary>
-        public static void LogWaring(
-            this ISimpleLogger logger,
-            object message,
-            [CallerFilePath] string callerFilePath = "",
-            [CallerLineNumber] int callerLineNumber = 0,
-            [CallerMemberName] string callerMemberName = "" )
-        {
-            logger.Log( LogLevel.Warning, message, callerFilePath, callerLineNumber, callerMemberName );
-        }
-
-        /// <summary>
-        /// Log with <see cref="LogLevel.Error"/> alias of <see cref="ISimpleLogger.LogException(LogLevel, System.Exception, string, int, string)"/>
-        /// </summary>
-        public static void LogException(
-            this ISimpleLogger logger,
+        void LogException(
+            LogLevel level,
             System.Exception exception,
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0,
-            [CallerMemberName] string callerMemberName = "" )
-        {
-            logger.LogException( LogLevel.Error, exception );
-        }
+            [CallerMemberName] string callerMemberName = "" );
+        #endregion
+
+#region Asynchronous methods
 
         /// <summary>
-        /// Log with <see cref="LogLevel.Error"/> alias of <see cref="ISimpleLogger.Log(LogLevel, object, string, int, string)"/>
+        /// Log a message with formatter.
         /// </summary>
-        public static void LogError(
-            this ISimpleLogger logger,
+        Task LogAsync(
+            LogLevel level,
             object message,
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0,
-            [CallerMemberName] string callerMemberName = "" )
-        {
-            logger.Log( LogLevel.Error, message, callerFilePath, callerLineNumber, callerMemberName );
-        }
+            [CallerMemberName] string callerMemberName = "" );
 
         /// <summary>
-        /// Log with <see cref="LogLevel.Fatal"/> alias of <see cref="ISimpleLogger.Log(LogLevel, object, string, int, string)"/>
+        /// Log a message with formatter.
         /// </summary>
-        public static void LogFatal(
-            this ISimpleLogger logger,
-            object message,
+        Task LogExceptionAsync(
+            LogLevel level,
+            System.Exception exception,
             [CallerFilePath] string callerFilePath = "",
             [CallerLineNumber] int callerLineNumber = 0,
-            [CallerMemberName] string callerMemberName = "" )
-        {
-            logger.Log( LogLevel.Fatal, message, callerFilePath, callerLineNumber, callerMemberName );
-        }
+            [CallerMemberName] string callerMemberName = "" );
+
+#endregion
+
     }
+
+
 }
