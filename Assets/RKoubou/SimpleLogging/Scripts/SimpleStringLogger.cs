@@ -8,8 +8,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Net;
-using System.Net.Mail;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,7 +19,7 @@ namespace RKoubou.SimpleLogging
     /// </summary>
     abstract public class SimpleStringLogger : ISimpleLogger
     {
-
+        private readonly object lockObject = new object();
         protected readonly StringBuilder stringBuilder;
         protected StringWriter writer;
 
@@ -41,27 +39,39 @@ namespace RKoubou.SimpleLogging
         /// </summary>
         public virtual void Clear()
         {
-            stringBuilder.Clear();
+            lock( lockObject )
+            {
+                stringBuilder.Clear();
+            }
         }
 
         public virtual void Dispose()
         {
-            Clear();
-            writer?.Flush();
-            writer?.Close();
-            writer = null;
+            lock( lockObject )
+            {
+                Clear();
+                writer?.Flush();
+                writer?.Close();
+                writer = null;
+            }
         }
 
         public virtual void Log( LogLevel level, object message, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0, [CallerMemberName] string callerMemberName = "" )
         {
-            LogUnityConsole( level, message );
-            writer.WriteLine( Formatter, level, message.ToString(), callerFilePath, callerLineNumber, callerMemberName );
+            lock( lockObject )
+            {
+                LogUnityConsole( level, message );
+                writer.WriteLine( Formatter, level, message.ToString(), callerFilePath, callerLineNumber, callerMemberName );
+            }
         }
 
         public virtual void LogException( LogLevel level, Exception exception, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0, [CallerMemberName] string callerMemberName = "" )
         {
-            LogExceptionUnityConsole( exception );
-            writer.WriteLine( Formatter.ExceprionFormat( level, exception, callerFilePath, callerLineNumber, callerMemberName ) );
+            lock( lockObject )
+            {
+                LogExceptionUnityConsole( exception );
+                writer.WriteLine( Formatter.ExceprionFormat( level, exception, callerFilePath, callerLineNumber, callerMemberName ) );
+            }
         }
 
         public virtual Task LogAsync( LogLevel level, object message, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0, [CallerMemberName] string callerMemberName = "" )

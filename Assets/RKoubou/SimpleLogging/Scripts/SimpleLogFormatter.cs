@@ -26,14 +26,17 @@ namespace RKoubou.SimpleLogging
             [CallerLineNumber] int callerLineNumber = 0,
             [CallerMemberName] string callerMemberName = "" )
         {
-            stringBuilder.Clear();
+            lock( stringBuilder )
+            {
+                stringBuilder.Clear();
 
-            GenerateHeader( stringBuilder, logLevel, callerFilePath, callerLineNumber, callerMemberName )
-                .Append( " Exception" )
-                .Append( Environment.NewLine )
-                .Append( exception.StackTrace );
+                GenerateHeader( stringBuilder, logLevel, callerFilePath, callerLineNumber, callerMemberName )
+                    .Append( " Exception" )
+                    .Append( Environment.NewLine )
+                    .Append( exception.StackTrace );
 
-            return stringBuilder.ToString();
+                return stringBuilder.ToString();
+            }
         }
 
         public string Format(
@@ -43,12 +46,15 @@ namespace RKoubou.SimpleLogging
             [CallerLineNumber] int callerLineNumber = 0,
             [CallerMemberName] string callerMemberName = "" )
         {
-            stringBuilder.Clear();
+            lock( stringBuilder )
+            {
+                stringBuilder.Clear();
 
-            GenerateHeader( stringBuilder, logLevel, callerFilePath, callerLineNumber, callerMemberName )
-                .Append( message );
+                GenerateHeader( stringBuilder, logLevel, callerFilePath, callerLineNumber, callerMemberName )
+                    .Append( message );
 
-            return stringBuilder.ToString();
+                return stringBuilder.ToString();
+            }
         }
 
         private static StringBuilder GenerateHeader(

@@ -39,23 +39,24 @@ namespace RKoubou.SimpleLogging
 
         public void SendToSlack( string token, UploadParameter parameter )
         {
-            lock( stringBuilder )
+            using( var client = new WebClient { Encoding = Encoding.UTF8 } )
             {
-                using( WebClient client = new WebClient { Encoding = Encoding.UTF8 } )
+                var sendData = new NameValueCollection();
+
+                sendData.Add( "token", token );
+                sendData.Add( "channels", parameter.channel );
+                sendData.Add( "filename", parameter.fileName );
+                sendData.Add( "filetype", parameter.fileType );
+                sendData.Add( "title", parameter.title );
+
+                lock( stringBuilder )
                 {
-                    var sendData = new NameValueCollection();
-
-                    sendData.Add( "token", token );
-                    sendData.Add( "channels", parameter.channel );
-                    sendData.Add( "filename", parameter.fileName );
-                    sendData.Add( "filetype", parameter.fileType );
-                    sendData.Add( "title", parameter.title );
                     sendData.Add( "content", stringBuilder.ToString() );
-
-                    client.Headers.Add( HttpRequestHeader.ContentType, "application/x-www-form-urlencoded" );
-                    var resultData = client.UploadValues( "https://slack.com/api/files.upload", sendData );
-                    var response = Encoding.UTF8.GetString( resultData );
                 }
+
+                client.Headers.Add( HttpRequestHeader.ContentType, "application/x-www-form-urlencoded" );
+                var resultData = client.UploadValues( "https://slack.com/api/files.upload", sendData );
+                var response = Encoding.UTF8.GetString( resultData );
             }
         }
 

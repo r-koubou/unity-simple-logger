@@ -18,6 +18,7 @@ namespace RKoubou.SimpleLogging
     /// </summary>
     public class SimpleStreamLogger : ISimpleLogger
     {
+        private readonly object lockObject = new object();
         protected TextWriter writer;
 
         public ISimpleLogFormatter Formatter { get; set; }
@@ -35,21 +36,30 @@ namespace RKoubou.SimpleLogging
 
         virtual public void Dispose()
         {
-            writer?.Flush();
-            writer?.Close();
-            writer = null;
+            lock( lockObject )
+            {
+                writer?.Flush();
+                writer?.Close();
+                writer = null;
+            }
         }
 
         public virtual void Log( LogLevel level, object message, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0, [CallerMemberName] string callerMemberName = "" )
         {
-            LogUnityConsole( level, message );
-            writer.WriteLine( Formatter, level, message.ToString(), callerFilePath, callerLineNumber, callerMemberName );
+            lock( lockObject )
+            {
+                LogUnityConsole( level, message );
+                writer.WriteLine( Formatter, level, message.ToString(), callerFilePath, callerLineNumber, callerMemberName );
+            }
         }
 
         public virtual void LogException( LogLevel level, Exception exception, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0, [CallerMemberName] string callerMemberName = "" )
         {
-            LogExceptionUnityConsole( exception );
-            writer.WriteLine( Formatter, level, exception, callerFilePath, callerLineNumber, callerMemberName );
+            lock( lockObject )
+            {
+                LogExceptionUnityConsole( exception );
+                writer.WriteLine( Formatter, level, exception, callerFilePath, callerLineNumber, callerMemberName );
+            }
         }
         public virtual Task LogAsync( LogLevel level, object message, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0, [CallerMemberName] string callerMemberName = "" )
         {

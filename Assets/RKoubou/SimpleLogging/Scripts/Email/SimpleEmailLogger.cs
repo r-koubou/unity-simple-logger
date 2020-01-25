@@ -5,13 +5,8 @@
 
    ======================================================================== */
 
-using System;
-using System.Diagnostics;
-using System.IO;
 using System.Net;
 using System.Net.Mail;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RKoubou.SimpleLogging
@@ -44,28 +39,29 @@ namespace RKoubou.SimpleLogging
 
         public void SendEmail( SendMailInfo info )
         {
-            lock( stringBuilder )
+            using( var mailMessage = new MailMessage() )
+            using( var client = new SmtpClient() )
             {
-                using( MailMessage mailMessage = new MailMessage() )
-                using( SmtpClient client = new SmtpClient() )
+                mailMessage.From = new MailAddress( info.sendFrom );
+                mailMessage.To.Add( info.sendTo );
+                mailMessage.Subject = info.subject;
+
+                lock( stringBuilder )
                 {
-                    mailMessage.From = new MailAddress( info.sendFrom );
-                    mailMessage.To.Add( info.sendTo );
-                    mailMessage.Subject = info.subject;
                     mailMessage.Body = stringBuilder.ToString();
-
-                    client.Host = info.host;
-                    client.Port = info.port;
-                    client.EnableSsl = true;
-                    client.DeliveryMethod = info.method;
-
-                    if( info.networkCredential != null )
-                    {
-                        client.Credentials = info.networkCredential;
-                    }
-
-                    client.Send( mailMessage );
                 }
+
+                client.Host = info.host;
+                client.Port = info.port;
+                client.EnableSsl = true;
+                client.DeliveryMethod = info.method;
+
+                if( info.networkCredential != null )
+                {
+                    client.Credentials = info.networkCredential;
+                }
+
+                client.Send( mailMessage );
             }
         }
 
