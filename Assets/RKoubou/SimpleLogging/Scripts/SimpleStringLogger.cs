@@ -1,4 +1,4 @@
-/* =========================================================================
+﻿/* =========================================================================
 
     SimpleStringLogger.cs
     Copyright(c) R-Koubou
@@ -23,15 +23,22 @@ namespace RKoubou.SimpleLogging
         protected readonly StringBuilder stringBuilder;
         protected StringWriter writer;
 
+        public string Name { get; set; }
+
         public ISimpleLogFormatter Formatter { get; set; }
 
         public abstract bool IsLogLevelAllowed( LogLevel logLevel );
 
-        public SimpleStringLogger( ISimpleLogFormatter formatter )
+        public SimpleStringLogger( string loggerName, ISimpleLogFormatter formatter )
         {
+            Name = loggerName;
             stringBuilder = new StringBuilder();
             writer = new StringWriter( stringBuilder );
             Formatter = formatter;
+        }
+
+        public SimpleStringLogger( string loggerName = "SimpleStringLogger" ) : this( loggerName, SimpleLogFormatter.Default )
+        {
         }
 
         /// <summary>

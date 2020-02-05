@@ -1,14 +1,12 @@
-/* =========================================================================
+﻿/* =========================================================================
 
     LoggingSlackSample.cs
     Copyright(c) R-Koubou
 
    ======================================================================== */
 
-using System.Net;
-using System.Net.Mail;
-using UnityEngine;
 using RKoubou.SimpleLogging;
+using UnityEngine;
 
 public class LoggingSlackSample : MonoBehaviour
 {
@@ -31,7 +29,7 @@ public class LoggingSlackSample : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        logger = new SimpleSlackLogger( new SimpleLogFormatter() );
+        logger = new SimpleSlackLogger();
         logger.LogDebug( "Start" );
         logger.LogWaring( "Warning" );
         try
@@ -46,7 +44,7 @@ public class LoggingSlackSample : MonoBehaviour
 
     public void OnClickSendButton()
     {
-        // Send log via Email
+        // Send log via Slack API (files.upload)
         var fileName = $"{prefix}_{System.DateTime.Now.ToString( DateFormat )}.{fileType}";
         SimpleSlackLogger.UploadParameter param = new SimpleSlackLogger.UploadParameter()
         {

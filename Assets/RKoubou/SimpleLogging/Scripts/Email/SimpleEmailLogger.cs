@@ -1,4 +1,4 @@
-/* =========================================================================
+﻿/* =========================================================================
 
     SimpleEmailLogger.cs
     Copyright(c) R-Koubou
@@ -33,7 +33,12 @@ namespace RKoubou.SimpleLogging
             return true;
         }
 
-        public SimpleEmailLogger( ISimpleLogFormatter formatter ) : base( formatter )
+        public SimpleEmailLogger( string loggerName, ISimpleLogFormatter formatter ) : base( loggerName, formatter )
+        {
+        }
+
+        public SimpleEmailLogger( string loggerName = "SimpleEmailLogger" )
+            : this( loggerName, SimpleLogFormatter.Default )
         {
         }
 

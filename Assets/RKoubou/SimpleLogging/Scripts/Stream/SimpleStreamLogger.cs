@@ -1,4 +1,4 @@
-/* =========================================================================
+﻿/* =========================================================================
 
     SimpleStreamLogger.cs
     Copyright(c) R-Koubou
@@ -21,6 +21,8 @@ namespace RKoubou.SimpleLogging
         private readonly object lockObject = new object();
         protected TextWriter writer;
 
+        public string Name { get; set; }
+
         public ISimpleLogFormatter Formatter { get; set; }
 
         public virtual bool IsLogLevelAllowed( LogLevel logLevel )
@@ -28,10 +30,21 @@ namespace RKoubou.SimpleLogging
             return true;
         }
 
-        public SimpleStreamLogger( Stream source, ISimpleLogFormatter formatter, bool autoFlush = false )
+        public SimpleStreamLogger( string loggerName, Stream source, ISimpleLogFormatter formatter, bool autoFlush = false )
         {
+            Name = loggerName;
             writer = new StreamWriter( source ) { AutoFlush = autoFlush };
             Formatter = formatter;
+        }
+
+        public SimpleStreamLogger( string loggerName, Stream source, bool autoFlush = false )
+            : this( loggerName, source, SimpleLogFormatter.Default, autoFlush )
+        {
+        }
+
+        public SimpleStreamLogger( Stream source, bool autoFlush = false )
+            : this( "SimpleStreamLogger", source, SimpleLogFormatter.Default, autoFlush )
+        {
         }
 
         virtual public void Dispose()

@@ -1,4 +1,4 @@
-/* =========================================================================
+﻿/* =========================================================================
 
     LoggingSample.cs
     Copyright(c) R-Koubou
@@ -19,7 +19,7 @@ public class LoggingSample : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        logger = new SimpleStreamLogger( new FileStream( logFilePath, FileMode.Append ), new SimpleLogFormatter() );
+        logger = new SimpleStreamLogger( new FileStream( logFilePath, FileMode.Append ) );
         logger.LogDebug( "Start" );
         logger.LogWaring( "Warning" );
         try

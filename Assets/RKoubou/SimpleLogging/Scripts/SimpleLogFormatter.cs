@@ -1,4 +1,4 @@
-/* =========================================================================
+﻿/* =========================================================================
 
     SimpleLogFormatter.cs
     Copyright(c) R-Koubou
@@ -18,6 +18,8 @@ namespace RKoubou.SimpleLogging
     {
         private static readonly string DateFormatString = "yyyy/MM/dd HH:mm:ss.fff";
         private readonly StringBuilder stringBuilder = new StringBuilder();
+
+        public static readonly SimpleLogFormatter Default = new SimpleLogFormatter();
 
         public string ExceprionFormat(
             LogLevel logLevel,

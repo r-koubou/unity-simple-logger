@@ -1,4 +1,4 @@
-/* =========================================================================
+﻿/* =========================================================================
 
     SimpleSlackLogger.cs
     Copyright(c) R-Koubou
@@ -33,9 +33,14 @@ namespace RKoubou.SimpleLogging
             return true;
         }
 
-        public SimpleSlackLogger( ISimpleLogFormatter formatter ) : base( formatter )
+        public SimpleSlackLogger( string loggerName, ISimpleLogFormatter formatter )
+            : base( loggerName, formatter )
         {
         }
+
+        public SimpleSlackLogger( string loggerName = "SimpleSlackLogger" )
+            : this( loggerName, SimpleLogFormatter.Default )
+        {}
 
         public void SendToSlack( string token, UploadParameter parameter )
         {

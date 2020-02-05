@@ -1,4 +1,4 @@
-/* =========================================================================
+﻿/* =========================================================================
 
     LoggingEmailSample.cs
     Copyright(c) R-Koubou
@@ -38,7 +38,7 @@ public class LoggingEmailSample : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        logger = new SimpleEmailLogger( new SimpleLogFormatter() );
+        logger = new SimpleEmailLogger();
         logger.LogDebug( "Start" );
         logger.LogWaring( "Warning" );
         try
