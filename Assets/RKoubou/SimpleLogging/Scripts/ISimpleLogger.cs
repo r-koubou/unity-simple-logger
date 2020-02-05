@@ -1,4 +1,4 @@
-/* =========================================================================
+﻿/* =========================================================================
 
     ISimpleLogger.cs
     Copyright(c) R-Koubou
@@ -16,7 +16,12 @@ namespace RKoubou.SimpleLogging
     public interface ISimpleLogger : System.IDisposable
     {
         /// <summary>
-        /// For creating a formatted message
+        /// This logger name.
+        /// </summary>
+        string Name { get; }
+
+        /// <summary>
+        /// For creating a formatted message.
         /// </summary>
         ISimpleLogFormatter Formatter { get; set; }
 
