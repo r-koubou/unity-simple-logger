@@ -72,7 +72,6 @@ namespace RKoubou.SimpleLogging
             .Append( "\t" )
             .Append( DateTime.Now.ToString( DateFormatString ) )
             .Append( "\t" )
-            .Append( callerFilePath )
             .Append( $"{callerFilePath}:{callerLineNumber}\tfrom:{callerMemberName}" )
             .Append( "\t" );
             return builder;
