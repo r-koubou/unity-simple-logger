@@ -22,8 +22,8 @@ namespace RKoubou.SimpleLogging
         protected TextWriter writer;
 
         public string Name { get; set; }
-
         public ISimpleLogFormatter Formatter { get; set; }
+        public bool OutputToOtherConsole { get; set; } = true;
 
         public virtual bool IsLogLevelAllowed( LogLevel logLevel )
         {
@@ -89,13 +89,19 @@ namespace RKoubou.SimpleLogging
         [Conditional( "UNITY_EDITOR" )]
         private void LogUnityConsole( LogLevel level, object message )
         {
-            UnityEngine.Debug.unityLogger.Log( LogLevelConverter.ToUnity( level ), message );
+            if( OutputToOtherConsole )
+            {
+                UnityEngine.Debug.unityLogger.Log( LogLevelConverter.ToUnity( level ), message );
+            }
         }
 
         [Conditional( "UNITY_EDITOR" )]
         private void LogExceptionUnityConsole( Exception exception )
         {
-            UnityEngine.Debug.unityLogger.LogException( exception );
+            if( OutputToOtherConsole )
+            {
+                UnityEngine.Debug.unityLogger.LogException( exception );
+            }
         }
 
     }

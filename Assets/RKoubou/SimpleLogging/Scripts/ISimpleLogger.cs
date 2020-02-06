@@ -30,6 +30,11 @@ namespace RKoubou.SimpleLogging
         /// </summary>
         bool IsLogLevelAllowed( LogLevel logLevel );
 
+        /// <summary>
+        /// If loggers supported multiple output (e.g. file and console), it will be enabled by set to true.
+        /// </summary>
+        bool OutputToOtherConsole { get; set; }
+
 #region Synchronous methods
 
         /// <summary>
