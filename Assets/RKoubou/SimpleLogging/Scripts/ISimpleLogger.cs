@@ -35,7 +35,17 @@ namespace RKoubou.SimpleLogging
         /// </summary>
         bool OutputToOtherConsole { get; set; }
 
-#region Synchronous methods
+        #region Synchronous methods
+
+        /// <summary>
+        /// Log a message without formatter.
+        /// </summary>
+        void LogRaw(
+            LogLevel level,
+            object message,
+            [CallerFilePath] string callerFilePath = "",
+            [CallerLineNumber] int callerLineNumber = 0,
+            [CallerMemberName] string callerMemberName = "" );
 
         /// <summary>
         /// Log a message with formatter.

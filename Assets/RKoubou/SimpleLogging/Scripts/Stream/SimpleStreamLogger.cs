@@ -57,6 +57,15 @@ namespace RKoubou.SimpleLogging
             }
         }
 
+        public virtual void LogRaw( LogLevel level, object message, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0, [CallerMemberName] string callerMemberName = "" )
+        {
+            lock( lockObject )
+            {
+                LogUnityConsole( level, message );
+                writer.WriteLine( message.ToString() );
+            }
+        }
+
         public virtual void Log( LogLevel level, object message, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0, [CallerMemberName] string callerMemberName = "" )
         {
             lock( lockObject )
