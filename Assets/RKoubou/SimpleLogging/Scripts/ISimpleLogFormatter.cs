@@ -15,6 +15,11 @@ namespace RKoubou.SimpleLogging
     public interface ISimpleLogFormatter
     {
         /// <summary>
+        /// If true, formatter will output a callerFilePath as filename only.
+        /// </summary>
+        bool LoggingFileNameOnly { get; set; }
+
+        /// <summary>
         /// Create a formated message from given parameters.
         /// </summary>
         /// <param name="logLevel">Log level</param>

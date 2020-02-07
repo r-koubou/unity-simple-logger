@@ -26,14 +26,19 @@ namespace RKoubou.SimpleLogging
         ISimpleLogFormatter Formatter { get; set; }
 
         /// <summary>
-        /// Check logging is enabled from given log level.
+        /// Current log level in this logger.
         /// </summary>
-        bool IsLogLevelAllowed( LogLevel logLevel );
+        LogLevel Level { get; set; }
 
         /// <summary>
         /// If loggers supported multiple output (e.g. file and console), it will be enabled by set to true.
         /// </summary>
         bool OutputToOtherConsole { get; set; }
+
+        /// <summary>
+        /// Check logging is enabled from given log level.
+        /// </summary>
+        bool IsLogLevelAllowed( LogLevel logLevel );
 
         #region Synchronous methods
 

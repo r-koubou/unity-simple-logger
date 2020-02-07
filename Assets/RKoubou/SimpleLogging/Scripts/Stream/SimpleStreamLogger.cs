@@ -23,12 +23,10 @@ namespace RKoubou.SimpleLogging
 
         public string Name { get; set; }
         public ISimpleLogFormatter Formatter { get; set; }
-        public bool OutputToOtherConsole { get; set; } = true;
 
-        public virtual bool IsLogLevelAllowed( LogLevel logLevel )
-        {
-            return true;
-        }
+        public LogLevel Level { get; set; } = LogLevel.Trace;
+
+        public bool OutputToOtherConsole { get; set; } = true;
 
         public SimpleStreamLogger( string loggerName, Stream source, ISimpleLogFormatter formatter, bool autoFlush = false )
         {
@@ -47,6 +45,11 @@ namespace RKoubou.SimpleLogging
         {
         }
 
+        public virtual bool IsLogLevelAllowed( LogLevel logLevel )
+        {
+            return logLevel >= Level;
+        }
+
         virtual public void Dispose()
         {
             lock( lockObject )
@@ -59,6 +62,10 @@ namespace RKoubou.SimpleLogging
 
         public virtual void LogRaw( LogLevel level, object message, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0, [CallerMemberName] string callerMemberName = "" )
         {
+            if( !IsLogLevelAllowed( level ) )
+            {
+                return;
+            }
             lock( lockObject )
             {
                 LogUnityConsole( level, message );
@@ -68,6 +75,10 @@ namespace RKoubou.SimpleLogging
 
         public virtual void Log( LogLevel level, object message, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0, [CallerMemberName] string callerMemberName = "" )
         {
+            if( !IsLogLevelAllowed( level ) )
+            {
+                return;
+            }
             lock( lockObject )
             {
                 LogUnityConsole( level, message );
@@ -77,6 +88,10 @@ namespace RKoubou.SimpleLogging
 
         public virtual void LogException( LogLevel level, Exception exception, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0, [CallerMemberName] string callerMemberName = "" )
         {
+            if( !IsLogLevelAllowed( level ) )
+            {
+                return;
+            }
             lock( lockObject )
             {
                 LogExceptionUnityConsole( exception );
@@ -85,12 +100,20 @@ namespace RKoubou.SimpleLogging
         }
         public virtual Task LogAsync( LogLevel level, object message, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0, [CallerMemberName] string callerMemberName = "" )
         {
+            if( !IsLogLevelAllowed( level ) )
+            {
+                return Task.CompletedTask;
+            }
             LogUnityConsole( level, message );
             return writer.WriteLineAsync( Formatter, level, message, callerFilePath, callerLineNumber, callerMemberName );
         }
 
         public Task LogExceptionAsync( LogLevel level, Exception exception, [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int callerLineNumber = 0, [CallerMemberName] string callerMemberName = "" )
         {
+            if( !IsLogLevelAllowed( level ) )
+            {
+                return Task.CompletedTask;
+            }
             LogExceptionUnityConsole( exception );
             return writer.WriteExceptionLineAsync( Formatter, level, exception, callerFilePath, callerLineNumber, callerMemberName );
         }

@@ -6,6 +6,7 @@
    ======================================================================== */
 
 using System;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -16,10 +17,13 @@ namespace RKoubou.SimpleLogging
     /// </summary>
     public class SimpleLogFormatter : ISimpleLogFormatter
     {
-        private static readonly string DateFormatString = "yyyy/MM/dd HH:mm:ss.fff";
+        private static readonly string DateFormatString = "yyyy/MM/dd";
+        private static readonly string TimeFormatString = "HH:mm:ss.fff";
         private readonly StringBuilder stringBuilder = new StringBuilder();
 
         public static readonly SimpleLogFormatter Default = new SimpleLogFormatter();
+
+        public bool LoggingFileNameOnly { get; set; } = false;
 
         public string ExceprionFormat(
             LogLevel logLevel,
@@ -59,18 +63,27 @@ namespace RKoubou.SimpleLogging
             }
         }
 
-        private static StringBuilder GenerateHeader(
+        private StringBuilder GenerateHeader(
             StringBuilder builder,
             LogLevel logLevel,
             string callerFilePath,
             int callerLineNumber,
             string callerMemberName )
         {
+            if( LoggingFileNameOnly )
+            {
+                callerFilePath = Path.GetFileName( callerFilePath );
+            }
+
+            DateTime now = DateTime.Now;
+
             builder.Append( "[" )
             .Append( logLevel )
             .Append( "]" )
             .Append( "\t" )
-            .Append( DateTime.Now.ToString( DateFormatString ) )
+            .Append( now.ToString( DateFormatString ) )
+            .Append( "\t" )
+            .Append( now.ToString( TimeFormatString ) )
             .Append( "\t" )
             .Append( $"{callerFilePath}:{callerLineNumber}" )
             .Append( "\t" );

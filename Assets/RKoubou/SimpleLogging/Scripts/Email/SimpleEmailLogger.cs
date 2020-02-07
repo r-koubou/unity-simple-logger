@@ -28,11 +28,6 @@ namespace RKoubou.SimpleLogging
             public NetworkCredential networkCredential;
         }
 
-        public override bool IsLogLevelAllowed( LogLevel logLevel )
-        {
-            return true;
-        }
-
         public SimpleEmailLogger( string loggerName, ISimpleLogFormatter formatter ) : base( loggerName, formatter )
         {
         }

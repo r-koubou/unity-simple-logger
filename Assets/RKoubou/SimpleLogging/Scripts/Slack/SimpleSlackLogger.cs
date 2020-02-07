@@ -28,11 +28,6 @@ namespace RKoubou.SimpleLogging
             public string fileType;
         }
 
-        public override bool IsLogLevelAllowed( LogLevel logLevel )
-        {
-            return true;
-        }
-
         public SimpleSlackLogger( string loggerName, ISimpleLogFormatter formatter )
             : base( loggerName, formatter )
         {
